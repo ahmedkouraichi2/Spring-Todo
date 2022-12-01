@@ -19,18 +19,25 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Todos implements Serializable {
-	@Id
-	@GeneratedValue
-	private Long id ;
-	private String title;
-	private String description;
-	private ZonedDateTime startTime;
-	
-	@ManyToOne
-	@JoinColumn(name="categoryId")
-	@JsonIgnore
-	private Category category;
+public class Todo implements Serializable {
+	 @Id
+	    @GeneratedValue
+	    private Long id;
+
+	    private String title;
+
+	    private String description;
+
+	    private ZonedDateTime startDate;
+
+	    private boolean done;
+
+	    private boolean favorite;
+	    
+	    @ManyToOne
+	    @JoinColumn(name="categoryId")
+	    @JsonIgnore
+	    private Category category;
 	
 	
 	
