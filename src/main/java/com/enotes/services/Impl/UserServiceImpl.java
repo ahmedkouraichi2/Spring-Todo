@@ -1,41 +1,78 @@
 package com.enotes.services.Impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.enotes.UserValidator.UserValidator;
+import com.enotes.exception.EntityNotFoundException;
+import com.enotes.exception.ErrorCodes;
+import com.enotes.exception.InvalidEntityException;
+import com.enotes.repository.UserRepository;
 import com.enotes.services.UserService;
 
 import dto.UserDto;
 
 public class UserServiceImpl implements UserService {
 
+	@Autowired
+	UserRepository userRepository ;
+	
 	@Override
 	public UserDto save(UserDto user) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		List<String> errors = UserValidator.validateUser(user);
+		if(!errors.isEmpty()) {
+			//log.error("User is not valid {}", user);
+			// System.out.println("User is not valid {}",user);
+			 throw new InvalidEntityException("User is not valid ",ErrorCodes.USER_NOT_VALID,errors);
+		}
+		return UserDto.fromEntity(userRepository.save(UserDto.toEntity(user)));
 	}
 
 	@Override
 	public List<UserDto> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return userRepository.findAll().stream()
+				.map(UserDto::fromEntity)
+				.collect(Collectors.toList())
+				;
 	}
 
 	@Override
 	public UserDto findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if (id == null) {
+            //log.error("User id is null");
+            return null;
+        }
+        return userRepository.findById(id).map(UserDto::fromEntity)
+                .orElseThrow(() -> new EntityNotFoundException("No user found with ID = " + id, ErrorCodes.USER_NOT_FOUND));
 	}
 
 	@Override
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
+		
+		
+		   if (id == null) {
+	            //log.error("User id is null");
+	            throw new EntityNotFoundException("No user found with ID = " + id, ErrorCodes.USER_NOT_FOUND);
+	        }
+	        userRepository.deleteById(id);
 		
 	}
 
 	@Override
 	public UserDto login(UserDto user) {
-		// TODO Auto-generated method stub
-		return null;
+	    List<String> errors = UserValidator.validateUserCredentials(user.getEmail(), user.getPassword());
+        if (!errors.isEmpty()) {
+            throw new InvalidEntityException("User is not valid", ErrorCodes.USER_NOT_VALID, errors);
+        }
+        return userRepository.findUserByEmailAndPassword(user.getEmail(), user.getPassword())
+                .map(UserDto::fromEntity)
+                .orElseThrow(() -> new EntityNotFoundException("No user found with Email = " + user.getEmail() + " and Password = <HIDDEN_PASSWORD>", ErrorCodes.USER_NOT_FOUND));
+    }
 	}
 
-}

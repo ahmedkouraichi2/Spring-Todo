@@ -6,7 +6,7 @@ import dto.TodoDto;
 
 public interface TodoService {
 	
-	 TodoDto save(TodoDto todoDto);
+	    TodoDto save(TodoDto todoDto);
 
 	    List<TodoDto> findAll();
 
@@ -15,5 +15,4 @@ public interface TodoService {
 	    List<TodoDto> findByCategory(Long categoryId);
 
 	    void delete(Long id);
-
 }
