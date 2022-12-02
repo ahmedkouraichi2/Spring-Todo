@@ -4,6 +4,7 @@ import org.apache.juli.logging.Log;
 import java.time.ZonedDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.enotes.UserValidator.CategoryValidator;
 import com.enotes.exception.EntityNotFoundException;
@@ -15,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import dto.CategoryDto;
-
+@Service
 public class CategoryServiceImpl implements CategoryService{
     
 	 @Autowired

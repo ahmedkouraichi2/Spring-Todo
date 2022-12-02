@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.enotes.UserValidator.UserValidator;
 import com.enotes.exception.EntityNotFoundException;
@@ -13,7 +14,7 @@ import com.enotes.repository.UserRepository;
 import com.enotes.services.UserService;
 
 import dto.UserDto;
-
+@Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired

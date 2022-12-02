@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.enotes.UserValidator.TodoValidator;
 import com.enotes.entity.Category;
@@ -18,7 +19,7 @@ import com.enotes.services.TodoService;
 
 import dto.CategoryDto;
 import dto.TodoDto;
-
+@Service
 public class TodoServiceImpl  implements TodoService{
 	
 	 @Autowired
