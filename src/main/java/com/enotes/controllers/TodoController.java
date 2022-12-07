@@ -21,7 +21,7 @@ import com.enotes.services.TodoService;
 import dto.TodoDto;
 
 @RestController
-@RequestMapping("todos")
+@RequestMapping("/todos")
 @CrossOrigin(origins = "*")
 public class TodoController {
 	
@@ -46,6 +46,14 @@ public class TodoController {
 	   public ResponseEntity<List<TodoDto>> getAllTodos() {
 	        return new ResponseEntity<>(todoService.findAll(), HttpStatus.OK);
 	    }
+	   
+	   
+	   
+	   @GetMapping("/todos/getById/{id}")
+	    public ResponseEntity<TodoDto> getOneById(@PathVariable Long id){
+		    return new ResponseEntity<>(todoService.findById(id), HttpStatus.OK);
+	   }
+	 
 	   
 	   
 	   
