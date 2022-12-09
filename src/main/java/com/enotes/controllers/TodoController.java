@@ -15,55 +15,56 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.enotes.controllers.apicontroller.TodoApi;
 import com.enotes.services.CategoryService;
 import com.enotes.services.TodoService;
 
 import dto.TodoDto;
 
+
 @RestController
-@RequestMapping("/todos")
-@CrossOrigin(origins = "*")
-public class TodoController {
+@CrossOrigin(origins = "*", maxAge = 3600)
+public class TodoController implements   TodoApi  {
 	
-	   @Autowired
-	   private TodoService todoService;
- 
-	   @Autowired
-	   private CategoryService categoryService;
-	 
-   
-	   @PostMapping("/addTodo") 
-	   public ResponseEntity<TodoDto> createTodo(@RequestBody TodoDto userDto) {
-        return new ResponseEntity<>(todoService.save(userDto), HttpStatus.CREATED);
-    }
+	@Autowired
+    private TodoService todoService;
+
+    @Autowired
+    private CategoryService categoryService;
+    
+
+	@Override
+	public ResponseEntity<TodoDto> createTodo(TodoDto todoDto) {
+		// TODO Auto-generated method stub
+		 return new ResponseEntity<>(todoService.save(todoDto), HttpStatus.CREATED);
+	}
+
+	@Override
+	public ResponseEntity<TodoDto> updateTodo(TodoDto todo) {
 	
-	    @PutMapping("/modifierTodo/{id}")
-	   public ResponseEntity<TodoDto> updateTodo( @RequestBody TodoDto todoDto) {
-	        return new ResponseEntity<>(todoService.save(todoDto), HttpStatus.CREATED);
-	    }
-	   
-	   @GetMapping("/todos/create")
-	   public ResponseEntity<List<TodoDto>> getAllTodos() {
-	        return new ResponseEntity<>(todoService.findAll(), HttpStatus.OK);
-	    }
-	   
-	   
-	   
-	   @GetMapping("/todos/getById/{id}")
-	    public ResponseEntity<TodoDto> getOneById(@PathVariable Long id){
-		    return new ResponseEntity<>(todoService.findById(id), HttpStatus.OK);
-	   }
-	 
-	   
-	   
-	   
-	   @DeleteMapping("todos/delete/{id}")
-	   public  ResponseEntity 
-	   deleteTodo(@PathVariable Long id) {
-	         todoService.delete(id);	
-	         return new ResponseEntity(HttpStatus.OK);
-	         
-	   }
-	 	
+		 return new ResponseEntity<>(todoService.save(todo), HttpStatus.CREATED); 
+		 
+	}
+	@Override
+	public ResponseEntity<List<TodoDto>> getAllTodos() {
+		// TODO Auto-generated method stub
+		return new ResponseEntity<>(todoService.findAll(), HttpStatus.OK); 
+	}
+
+	@Override
+	public ResponseEntity<TodoDto> getTodo(Long todoId) {
+		// TODO Auto-generated method stub
+		 return  new ResponseEntity<>(todoService.findById(todoId), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity deleteTodo(Long id) {
+		// TODO Auto-generated method stub
+	    todoService.delete(id);
+	    return null;
+	}
+	
+	  
+	
 
 }

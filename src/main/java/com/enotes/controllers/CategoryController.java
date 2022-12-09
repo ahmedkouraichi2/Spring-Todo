@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.enotes.controllers.apicontroller.CategoryApi;
 import com.enotes.services.CategoryService;
 import com.enotes.services.TodoService;
 
@@ -21,68 +22,72 @@ import dto.TodoDto;
 
 import java.util.List;
 
+
+
 @RestController
-@RequestMapping("api/categories")
-
-@CrossOrigin(origins ="*", maxAge= 3600)
-public class CategoryController {
-	
-    @Autowired
-    private TodoService todoService;
-
-    @Autowired
-    private CategoryService categoryService;
+@CrossOrigin(origins = "*", maxAge = 3600)
+public class CategoryController implements CategoryApi {
     
+	    @Autowired
+	    private TodoService todoService;
+
+	    @Autowired
+	    private CategoryService categoryService;
+	
+	@Override
+	public ResponseEntity<CategoryDto> createCategory(CategoryDto categoryDto) {
+		// TODO Auto-generated method stub
+		 return new ResponseEntity<>(categoryService.save(categoryDto), HttpStatus.CREATED);
+	}
+
+	@Override
+	public ResponseEntity<CategoryDto> updateCategory(CategoryDto user) {
+		// TODO Auto-generated method stub
+        return new ResponseEntity<>(categoryService.save(user), HttpStatus.CREATED);
+
+	}
+
+	@Override
+	public ResponseEntity<List<CategoryDto>> getAllCategories() {
+		// TODO Auto-generated method stub
+		 return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK); 
+	}
+
+	@Override
+	public ResponseEntity<List<TodoDto>> getAllTodoByCategoriesId(Long id) {
+		// TODO Auto-generated method stub
+        return new ResponseEntity<>(todoService.findByCategory(id), HttpStatus.OK);
+ 
+	}
+
+	@Override
+	public ResponseEntity<List<TodoDto>> getAllTodoByCategoriesForToday(Long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseEntity<List<CategoryDto>> getAllCategoriesByUserId(Long id) {
+		// TODO Auto-generated method stub
+        return new ResponseEntity<>(categoryService.findAllByUserId(id), HttpStatus.OK);
+ 
+	}
+
+	@Override
+	public ResponseEntity<CategoryDto> getCategory(Long id) {
+		// TODO Auto-generated method stub
+		  return new ResponseEntity<>(categoryService.findById(id), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity deleteCategory(Long id) {
+		// TODO Auto-generated method stub
+		 categoryService.delete(id);
+	        return new ResponseEntity(HttpStatus.OK);
+	}
+
+	
     
-    /* List of the categories" */
-	@GetMapping("/all")
-    public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
-    }
-	
-	
-	@PostMapping("/ajouter")
-	 public ResponseEntity<CategoryDto> createCategory( @RequestBody CategoryDto categoryDto){
-		return new ResponseEntity<>(categoryService.save(categoryDto),HttpStatus.CREATED);	
-		
-	}
-	
-	
-	
-	
-	
-	
-	@PutMapping("/updateCatgogy")
-	 public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto){
-		 return new ResponseEntity<>(categoryService.save(categoryDto),HttpStatus.CREATED);
-		 
-	}
-	
-	/*  "Deletes a category by ID       */
-	@DeleteMapping("/deleteCatgogy/{id}")
-	   public ResponseEntity deleteCategory(@PathVariable Long id) {
-        categoryService.delete(id);
-        return new ResponseEntity(HttpStatus.OK);
-        
-        
-        
-        
-        
-        
-        
-    }
-	
-	/* get "Returns the list of the categories of a selected user"*/
-	  
-	   @GetMapping("/categories/users/{id}")
-	  public ResponseEntity<List<TodoDto>> getAllTodoByCategoriesForToday(@PathVariable Long userId) {
-	        return new ResponseEntity(categoryService.getAllTodoByCategoriesForToday(userId), HttpStatus.OK);
-	    }
-	
-	
-	   
-	
-	
 	
     
  
